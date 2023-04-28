@@ -31,9 +31,9 @@ export function loadView() {
     // initialize scene
     scene = new THREE.Scene()
 
+    // initalize axes
     let axes = new THREE.AxesHelper(5)
     scene.add(axes)
-
 
     console.log('finished loading view')
 }

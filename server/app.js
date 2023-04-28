@@ -20,7 +20,6 @@ app.listen(port, () => {
   console.log(`server listening on port ${port}`)
 })
 
-
 // make a clean exit on ctl-C
 process.on('SIGINT', function(){
     console.log('\n...gracefully killing server...\n')
