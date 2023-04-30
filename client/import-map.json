@@ -1,0 +1,7 @@
+{
+    "imports": {
+      "three": "/three/three.module.js",
+      "three/addons/": "/three/addons/",
+      "lil-gui": "/lil-gui/lil-gui.esm.js"
+    }
+  }

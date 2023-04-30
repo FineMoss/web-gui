@@ -1,14 +1,21 @@
-import { loadView, render } from "./view.js";
+import { loadView, viewDidLoad, renderView } from "./view.js"
+import {} from './lil-gui-controller.js'
 
-// load the view
+
 loadView()
+waitForLoadView()
 
-// start the mainLoop
-mainLoop()
+// renderView depends on the view to be loaded, so we wait
+function waitForLoadView() {
+    if (viewDidLoad()) {
+        mainLoop()
+    } else {
+        setTimeout(waitForLoadView, 10)
+    }
+}
 
 function mainLoop() {
     // recursive call to mainLoop
     requestAnimationFrame(mainLoop)
-    // render the current state of the view
-    render()
+    renderView()
 }

@@ -1,13 +1,15 @@
 import express from 'express'
 
+
 const app = express()
 const port = 8008
 
 // serve the client site resources
 app.use('/', express.static('client'))
 app.use('/three', express.static('node_modules/three/build'))
-app.use('/stats', express.static('node_modules/three/examples/jsm/libs'))
-app.use('/controls', express.static('node_modules/three/examples/jsm/controls'))
+app.use('/three/addons', express.static('node_modules/three/examples/jsm'))
+app.use('/lil-gui', express.static('node_modules/lil-gui/dist'))
+app.use('/assets', express.static('server/assets'))
 
 // route client to index.html
 app.get('/', (req, res) => {
