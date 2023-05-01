@@ -7,11 +7,14 @@ import  Character from './Character.js'
 let scene, camera, renderer, controls, stats
 let view_did_load = false
 export let char
+let clock
 
 export function loadView() {
 
     // add elements to the html canvas
     const container = document.getElementById('scene');
+
+    clock = new THREE.Clock()
 
     // initialize stats
     stats = Stats()
@@ -51,27 +54,31 @@ export function loadView() {
     view_did_load = true
 
     char = new Character()
+    // char.promise.then(() => {
+    //     scene.add(char.gltf.scene)
+    // })
 
-    waitForLoadView()
-    function waitForLoadView() {
-        if (char.did_load) {
+    waitForLoad()
+    function waitForLoad() {
+        if (char.gltf) {
             scene.add(char.gltf.scene)
         } else {
-            setTimeout(waitForLoadView, 10)
+            setTimeout(waitForLoad, 10)
         }
     }
 
 }
 
-// returns true of the view finished loading
+// returns true if the view finished loading
 export function viewDidLoad() {
     return view_did_load
 }
 
 // renders the current state of the scene
 export function renderView() {
+    const dt = clock.getDelta()
+    if (char.mixer) char.mixer.update(dt)
     controls.update()
-    stats.update()
-    char.render(0.01)
     renderer.render(scene, camera)
+    stats.update()
 }
