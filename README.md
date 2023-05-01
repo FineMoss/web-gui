@@ -9,3 +9,4 @@ npm run [script]
 # TODO
 cors
 importmap or webpack/vite
+lil-gui imported through three js and not with importmap
