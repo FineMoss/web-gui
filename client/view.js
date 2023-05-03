@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import Stats from 'three/addons/libs/stats.module.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import  Character from './Character.js'
+import  {Character} from './Character.js'
 
 
 let scene, camera, renderer, controls, stats
@@ -12,7 +12,7 @@ let clock
 export function loadView() {
 
     // add elements to the html canvas
-    const container = document.getElementById('scene');
+    const container = document.getElementById('threejs');
 
     clock = new THREE.Clock()
 
@@ -29,7 +29,7 @@ export function loadView() {
 
     // initialize camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-    camera.position.set(0, 2, 4)
+    camera.position.set(0, 4, 8)
 
     // initialize orbit controls
     controls = new OrbitControls(camera, renderer.domElement)
@@ -77,7 +77,8 @@ export function viewDidLoad() {
 // renders the current state of the scene
 export function renderView() {
     const dt = clock.getDelta()
-    if (char.mixer) char.mixer.update(dt)
+    // if (char.mixer) char.mixer.update(dt)
+    if (char.mixer) char.update(dt)
     controls.update()
     renderer.render(scene, camera)
     stats.update()
