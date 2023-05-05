@@ -1,11 +1,10 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { key_press_map } from './event-listers.js'
 
 
 export class Character {
 
-    constructor() {
+    constructor(gltf) {
         // need to use the same function ref for eventListener
         this.bound_idleState = this.idleState.bind(this)
         this.active_state = 'idle'
@@ -14,19 +13,11 @@ export class Character {
         this.direction = new THREE.Vector3(0, 0, 1);
 
 
-        const loader = new GLTFLoader()
-        const promise = new Promise((resolve, reject) => {
-            loader.load('../server/assets/Mushnub.gltf', resolve, undefined, reject)
-        })
-
-        promise.then((gltf) => {
-            this.gltf = gltf
-            this.model = gltf.scene
-            this.mixer = new THREE.AnimationMixer(this.model)
-            this.active_action = this.mixer.clipAction(this.gltf.animations[4])
-            this.active_action.play()
-        })
-        
+        this.gltf = gltf
+        this.model = this.gltf.scene
+        this.mixer = new THREE.AnimationMixer(this.model)
+        this.active_action = this.mixer.clipAction(this.gltf.animations[4])
+        this.active_action.play()
     }
 
     updateState(new_state, i) {
@@ -88,7 +79,7 @@ export class Character {
                 this.updateState('idle', 4)
             }
         }
-        
+
         this.mixer.update(dt_seconds)
 
     }

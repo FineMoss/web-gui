@@ -1,11 +1,11 @@
 import GUI from 'three/addons/libs/lil-gui.module.min.js'
-import { char } from './view.js'
 
+export function init(char) {
+    const gui_state = {}
+    const gui = new GUI();
 
-const gui_state = {}
-const gui = new GUI();
-
-for (let i = 0; i <= 14; i++) {
-    gui_state['Animation '+i] = function () { char.updateAnimation(i) }
-    gui.add(gui_state, 'Animation '+i)
+    for (let i = 0; i <= 14; i++) {
+        gui_state['Animation '+i] = function () { char.updateAnimation(i) }
+        gui.add(gui_state, 'Animation '+i)
+    }
 }

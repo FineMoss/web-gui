@@ -1,19 +1,19 @@
-import { loadView, viewDidLoad, renderView } from "./view.js"
+import { loadView, renderView, addCharacter } from './view.js'
 import { initializeEventListeners } from './event-listers.js'
-import {} from './lil-gui-controller.js'
+import { loadAssets } from './asset-loader.js'
+import { init } from './lil-gui-controller.js'
+import { Character } from './Character.js'
 
 initializeEventListeners()
 loadView()
-waitForLoadView()
+mainLoop()
 
-// renderView depends on the view to be loaded, so we wait
-function waitForLoadView() {
-    if (viewDidLoad()) {
-        mainLoop()
-    } else {
-        setTimeout(waitForLoadView, 10)
-    }
-}
+loadAssets().then((gltf) => {
+    let char = new Character(gltf)
+    addCharacter(char)
+    init(char)
+})
+
 
 function mainLoop() {
     // recursive call to mainLoop

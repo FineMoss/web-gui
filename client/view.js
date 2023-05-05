@@ -1,13 +1,11 @@
 import * as THREE from 'three'
 import Stats from 'three/addons/libs/stats.module.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import  {Character} from './Character.js'
 
 
 let scene, camera, renderer, controls, stats
-let view_did_load = false
-export let char
 let clock
+let entity_list = []
 
 export function loadView() {
 
@@ -50,36 +48,26 @@ export function loadView() {
     point_light.position.set(10, 10, 10)
     scene.add(point_light)
 
+    window.addEventListener('resize', onWindowResize, false)
 
-    view_did_load = true
-
-    char = new Character()
-    // char.promise.then(() => {
-    //     scene.add(char.gltf.scene)
-    // })
-
-    waitForLoad()
-    function waitForLoad() {
-        if (char.gltf) {
-            scene.add(char.gltf.scene)
-        } else {
-            setTimeout(waitForLoad, 10)
-        }
-    }
-
-}
-
-// returns true if the view finished loading
-export function viewDidLoad() {
-    return view_did_load
 }
 
 // renders the current state of the scene
 export function renderView() {
     const dt = clock.getDelta()
-    // if (char.mixer) char.mixer.update(dt)
-    if (char.mixer) char.update(dt)
+    entity_list.forEach(item => { item.update(dt) })
     controls.update()
     renderer.render(scene, camera)
     stats.update()
+}
+
+export function addCharacter(char) {
+    entity_list.push(char)
+    scene.add(char.model)
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
 }
