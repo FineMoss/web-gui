@@ -1,16 +1,19 @@
 
 
-export const key_map = {}
+export const key_press_map = {}
 
-export function initialize() {
+export function initializeEventListeners() {
 
-    document.addEventListener('keydown', event => {
+    window.addEventListener('keydown', event => {
         if (event.key === 'w' || event.key === 'a' || event.key === 's' || event.key === 'd') {
-            key_map[event.key] = true        }
-    })
-    document.addEventListener('keyup', event => {
+            key_press_map[event.key] = true
+        }
+    }, true)
+
+    window.addEventListener('keyup', event => {
         if (event.key === 'w' || event.key === 'a' || event.key === 's' || event.key === 'd') {
-            delete key_map[event.key]        }
-    })
+            delete key_press_map[event.key]
+        }
+    }, true)
     
 }

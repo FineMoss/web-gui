@@ -1,8 +1,8 @@
 import { loadView, viewDidLoad, renderView } from "./view.js"
+import { initializeEventListeners } from './event-listers.js'
 import {} from './lil-gui-controller.js'
-import { initialize } from './event-listers.js'
 
-initialize()
+initializeEventListeners()
 loadView()
 waitForLoadView()
 

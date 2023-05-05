@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { key_map } from './event-listers.js'
+import { key_press_map } from './event-listers.js'
 
 
 export class Character {
@@ -9,7 +9,10 @@ export class Character {
         // need to use the same function ref for eventListener
         this.bound_idleState = this.idleState.bind(this)
         this.active_state = 'idle'
-        this.velocity = 1
+        this.speed = 1.5
+        this.rotation_speed = 1.2
+        this.direction = new THREE.Vector3(0, 0, 1);
+
 
         const loader = new GLTFLoader()
         const promise = new Promise((resolve, reject) => {
@@ -18,7 +21,8 @@ export class Character {
 
         promise.then((gltf) => {
             this.gltf = gltf
-            this.mixer = new THREE.AnimationMixer(this.gltf.scene)
+            this.model = gltf.scene
+            this.mixer = new THREE.AnimationMixer(this.model)
             this.active_action = this.mixer.clipAction(this.gltf.animations[4])
             this.active_action.play()
         })
@@ -64,18 +68,27 @@ export class Character {
 
     update(dt_seconds) {
 
-        if (key_map['w']) {
+        if (key_press_map['w'] || key_press_map['a'] || key_press_map['d']) {
             if (this.active_state !== 'walking') {
                 this.updateState('walking', 7)
             }
-            const delta_x = this.velocity*dt_seconds
-            this.gltf.scene.position.z += delta_x
+            if (key_press_map['a']) {
+                this.direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotation_speed * dt_seconds)
+                this.model.rotation.y = Math.atan2(this.direction.x, this.direction.z)
+            }
+            if (key_press_map['d']) {
+                this.direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), -this.rotation_speed * dt_seconds)
+                this.model.rotation.y = Math.atan2(this.direction.x, this.direction.z)
+            }
+            const velocity = this.direction.clone().multiplyScalar(this.speed * dt_seconds)
+            this.model.position.add(velocity)
         }
         else {
             if (this.active_state !== 'idle') {
                 this.updateState('idle', 4)
             }
         }
+        
         this.mixer.update(dt_seconds)
 
     }
