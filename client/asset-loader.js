@@ -4,7 +4,8 @@ export function loadAssets() {
 
     const loader = new GLTFLoader()
     const promise = new Promise((resolve, reject) => {
-        loader.load('../server/assets/Mushnub.gltf', resolve, undefined, reject)
+        // loader.load('../server/assets/Mushnub.gltf', resolve, undefined, reject)
+        loader.load('../server/assets/character_skeleton_warrior_first_save.glb', resolve, undefined, reject)
     })
 
     return promise

@@ -1,60 +1,35 @@
 import * as THREE from 'three'
 import { key_press_map } from './player-controls.js'
 
-export class Character
+export class Player
 {
     constructor(gltf)
     {
         console.log(gltf)
-        // need to use the same function ref for eventListener
-        this.bound_idleState = this.idleState.bind(this)
         this.active_state = 'idle'
-        this.speed = 1.5
-        this.rotation_speed = 1.2
+        this.speed = 3.0
+        this.rotation_speed = 4.0
         this.direction = new THREE.Vector3(0, 0, 1);
         this.gltf = gltf
         this.model = this.gltf.scene
         this.mixer = new THREE.AnimationMixer(this.model)
-        this.updateState('idle', 4)
+        this.updateState('idle', 15)
     }
 
     updateState(new_state, i)
     {
+        // if (new_state === this.active_state) return
         this.active_state = new_state
         if (this.active_action) this.active_action.fadeOut(0.2)
         this.active_action = this.mixer.clipAction(this.gltf.animations[i])
         this.active_action.reset().fadeIn(0.2).setLoop(THREE.LoopRepeat).play()
     }
 
-    idleState()
-    {
-        this.active_action.fadeOut(0.2)
-        this.mixer.removeEventListener('finished', this.bound_idleState)
-        this.active_action = this.mixer.clipAction(this.gltf.animations[4])
-        this.active_action.reset()
-        this.active_action.setLoop(THREE.LoopRepeat)
-        this.active_action.play()
-        console.log("done")
-    }
-
-    updateAnimation(value)
-    {
-        let new_action = this.mixer.clipAction(this.gltf.animations[value])
-        if (new_action === this.active_action) return
-        let prev_action = this.active_action
-        this.active_action = this.mixer.clipAction(this.gltf.animations[value])
-        if (prev_action !== this.active_action) prev_action.fadeOut(0.2)
-        this.active_action.reset()
-        this.active_action.fadeIn(0.2)
-        this.active_action.setLoop(THREE.LoopOnce)
-        this.active_action.play()
-    }
-
     update(dt_seconds)
     {
         if (key_press_map['w'] || key_press_map['a'] || key_press_map['d']) {
             if (this.active_state !== 'walking') {
-                this.updateState('walking', 7)
+                this.updateState('walking', 21)
             }
             if (key_press_map['a']) {
                 this.direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotation_speed * dt_seconds)
@@ -64,12 +39,14 @@ export class Character
                 this.direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), -this.rotation_speed * dt_seconds)
                 this.model.rotation.y = Math.atan2(this.direction.x, this.direction.z)
             }
-            const velocity = this.direction.clone().multiplyScalar(this.speed * dt_seconds)
-            this.model.position.add(velocity)
+            if (key_press_map['w']) {
+                const velocity = this.direction.clone().multiplyScalar(this.speed * dt_seconds)
+                this.model.position.add(velocity)
+            }
         }
         else {
             if (this.active_state !== 'idle') {
-                this.updateState('idle', 4)
+                this.updateState('idle', 15)
             }
         }
 
