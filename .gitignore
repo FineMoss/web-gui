@@ -1,4 +1,4 @@
 **/.DS_Store
 node_modules/
 package-lock.json
-assets/
+server/assets/Mushnub.gltf

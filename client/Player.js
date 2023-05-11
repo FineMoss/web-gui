@@ -16,22 +16,26 @@ export class Player
 
     update(dt_seconds)
     {
-        if (blocking_state['attacking']) this.attack()
+        if (blocking_state['attacking']) this.attack('attacking', 0)
+        else if (this.active_state === 'lil-gui') { }
         else this.updatePose(dt_seconds)
         this.mixer.update(dt_seconds)
     }
 
-    attack()
+    attack(new_state, i)
     {
-        if ('attacking' === this.active_state) return
-        this.active_state = 'attacking'
+        // if ('attacking' === this.active_state) return
+        // this.active_state = 'attacking'
+        if (new_state === this.active_state) return
+        this.active_state = new_state
         if (this.active_action) this.active_action.fadeOut(0.2)
-        this.active_action = this.mixer.clipAction(this.gltf.animations[0])
+        this.active_action = this.mixer.clipAction(this.gltf.animations[i])
         this.active_action.reset().fadeIn(0.2).setLoop(THREE.LoopOnce).play()
         const finishedAttacking = () =>
         {
             this.mixer.removeEventListener('finished', finishedAttacking)
             delete blocking_state['attacking']
+            this.active_state = ''
         }
         this.mixer.addEventListener('finished', finishedAttacking)
     }
