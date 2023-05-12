@@ -1,5 +1,5 @@
-import { loadView, renderView, addCharacter } from './view.js'
-import { loadAssets } from './asset-loader.js'
+import { loadView, renderView, addEntity } from './view.js'
+import { loadAssets, loadCharacter } from './asset-loader.js'
 import { init } from './lil-gui-controller.js'
 import { Character } from './Character.js'
 import { Player } from './Player.js'
@@ -9,9 +9,16 @@ mainLoop()
 
 loadAssets().then((gltf) =>
 {
-    let char = new Player(gltf)
-    addCharacter(char)
-    init(char)
+    let player = new Player(gltf)
+    addEntity(player)
+    init(player)
+})
+
+loadCharacter().then((gltf) =>
+{
+    let char = new Character(gltf)
+    addEntity(char)
+    char.model.position.set(-5, 0, -5)
 })
 
 

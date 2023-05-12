@@ -1,13 +1,11 @@
 import * as THREE from 'three'
-import { key_press_map } from './player-controls.js'
+import { key_press_map } from './character-controls.js'
 
 export class Character
 {
     constructor(gltf)
     {
         console.log(gltf)
-        // need to use the same function ref for eventListener
-        this.bound_idleState = this.idleState.bind(this)
         this.active_state = 'idle'
         this.speed = 1.5
         this.rotation_speed = 1.2
@@ -24,30 +22,6 @@ export class Character
         if (this.active_action) this.active_action.fadeOut(0.2)
         this.active_action = this.mixer.clipAction(this.gltf.animations[i])
         this.active_action.reset().fadeIn(0.2).setLoop(THREE.LoopRepeat).play()
-    }
-
-    idleState()
-    {
-        this.active_action.fadeOut(0.2)
-        this.mixer.removeEventListener('finished', this.bound_idleState)
-        this.active_action = this.mixer.clipAction(this.gltf.animations[4])
-        this.active_action.reset()
-        this.active_action.setLoop(THREE.LoopRepeat)
-        this.active_action.play()
-        console.log("done")
-    }
-
-    updateAnimation(value)
-    {
-        let new_action = this.mixer.clipAction(this.gltf.animations[value])
-        if (new_action === this.active_action) return
-        let prev_action = this.active_action
-        this.active_action = this.mixer.clipAction(this.gltf.animations[value])
-        if (prev_action !== this.active_action) prev_action.fadeOut(0.2)
-        this.active_action.reset()
-        this.active_action.fadeIn(0.2)
-        this.active_action.setLoop(THREE.LoopOnce)
-        this.active_action.play()
     }
 
     update(dt_seconds)

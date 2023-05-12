@@ -7,7 +7,8 @@ let scene, camera, renderer, controls, stats
 let clock
 let entity_list = []
 
-export function loadView() {
+export function loadView()
+{
 
     // add elements to the html canvas
     const container = document.getElementById('threejs');
@@ -53,20 +54,23 @@ export function loadView() {
 }
 
 // renders the current state of the scene
-export function renderView() {
+export function renderView()
+{
     const dt = clock.getDelta()
-    entity_list.forEach(item => { item.update(dt) })
+    entity_list.forEach(entity => { entity.update(dt) })
     controls.update()
     renderer.render(scene, camera)
     stats.update()
 }
 
-export function addCharacter(char) {
-    entity_list.push(char)
-    scene.add(char.model)
+export function addEntity(entity)
+{
+    entity_list.push(entity)
+    scene.add(entity.model)
 }
 
-function onWindowResize() {
+function onWindowResize()
+{
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
     renderer.setSize(window.innerWidth, window.innerHeight)
